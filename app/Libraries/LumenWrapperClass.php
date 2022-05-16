@@ -26,13 +26,13 @@ class LumenWrapperClass
         }
     }
 
-    public function postDataRequest($slug, $params, $post_data)
+    public function postDataRequest($endpoint, $params, $post_data)
     {
         try {
 
             $header = $this->getHeaders();
 
-            $response = $this->postRequest($this->apiURL . $this->api_end_points[$slug] . $params, $header, $post_data);
+            $response = $this->postRequest($this->apiURL . $endpoint . $params, $header, $post_data);
 
             return json_decode($response);
 
@@ -50,7 +50,7 @@ class LumenWrapperClass
         );
     }
 
-    public function getRequest($apiURL, $headers)
+    private function curlRequest($apiURL, $headers, $method, $post_data = [])
     {
         try {
 
@@ -58,46 +58,12 @@ class LumenWrapperClass
 
             curl_setopt($ch, CURLOPT_URL, $apiURL);
 
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
 
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            if ($post_data) {
 
-            curl_setopt($ch, CURLOPT_FAILONERROR, true);
-
-            curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
-
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-            $response = curl_exec($ch);
-
-            if (curl_errno($ch)) {
-
-                $error_msg = curl_error($ch);
-
-                throw new \Exception($error_msg);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($post_data));
             }
-
-            curl_close($ch);
-
-        } catch (\Exception $e) {
-
-            throw new \Exception($e->getMessage());
-        }
-
-        return $response;
-    }
-
-    public function postRequest($apiURL, $headers, $post_data)
-    {
-        try {
-
-            $ch = curl_init();
-
-            curl_setopt($ch, CURLOPT_URL, $apiURL);
-
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($post_data));
 
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
@@ -121,6 +87,5 @@ class LumenWrapperClass
 
         return $response;
     }
-
 
 }
