@@ -18,12 +18,16 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->post('blogs', 'BlogsController@store');
+$router->group(['prefix' => 'blogs'], function () use ($router) {
 
-$router->put('blogs/{id}', 'BlogsController@update');
+    $router->post('', 'BlogsController@store');
 
-$router->delete('blogs/{id}', 'BlogsController@delete');
+    $router->put('/{id}', 'BlogsController@update');
 
-$router->get('blogs/{id}', 'BlogsController@get');
+    $router->delete('/{id}', 'BlogsController@delete');
 
-$router->get('blogs', 'BlogsController@getAll');
+    $router->get('/{id}', 'BlogsController@get');
+
+    $router->get('/', 'BlogsController@getAll');
+});
+
