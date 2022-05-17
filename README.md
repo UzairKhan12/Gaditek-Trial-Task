@@ -1,6 +1,6 @@
 # Setup The Larvel Framework
 
-After cloning the repository and branch (lumen-blog) install the lumen dependencies using the composer install command and after install all the dependencies, create a file .env in root directory and copy the contents from .env.example to .env file and change the database credentials and database name.
+After cloning the repository and branch (laravel-blog) install the laravel dependencies using the composer install command and after install all the dependencies, create a file .env in root directory and copy the contents from .env.example to .env file and change the database credentials and database name.
 
 Also please copy the LUMEN_BLOG_API_KEY and LUMEN_BLOG_URL (the virtual host url that you created for the lumen application) from .env.example to .env, and you can find the api key in .env.example file to test the application, Api key has been used in the middleware of lumen api application.
 
