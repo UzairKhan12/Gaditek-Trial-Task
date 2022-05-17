@@ -6,7 +6,7 @@ Also please copy the LUMEN_BLOG_API_KEY and LUMEN_BLOG_URL (the virtual host url
 
 Create a database in MySQL and run a php artisan migrate command to migrate the tables into database.
 
-#How To Test
+# How To Test
 
 Goto the root directory of this project after setting it up and use the "php artisan blog:api" to run and test the application. 
 
