@@ -4,7 +4,7 @@ namespace App\Libraries;
 
 class LumenWrapperClass
 {
-    private $api_endpoints, $api_url,$api_key;
+    private $api_endpoints, $api_url, $api_key;
 
     public function __construct()
     {
@@ -22,12 +22,12 @@ class LumenWrapperClass
         $ch = curl_init();
 
         $headers = array(
-            'api-key:'.$this->api_key
+            'api-key:' . $this->api_key
         );
 
         if ($method == 'PUT') {
 
-            array_push($headers,'Content-Type:application/x-www-form-urlencoded');
+            array_push($headers, 'Content-Type:application/x-www-form-urlencoded');
 
             $post_data = http_build_query($post_data);
         }
@@ -54,9 +54,26 @@ class LumenWrapperClass
             throw new \Exception($error_msg);
         }
 
+        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
         curl_close($ch);
 
-        return json_decode($response);
+        $response = json_decode($response);
+
+        if (!in_array($httpcode, $this->successStatusCodes())) {
+
+            throw new \Exception($response->message);;
+        }
+
+        return $response;
+    }
+
+    private function successStatusCodes()
+    {
+        return [
+            200,
+            201
+        ];
     }
 
 }
