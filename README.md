@@ -18,7 +18,7 @@ Add this in your hosts file of the operating system
 
 <VirtualHost *:80>
 DocumentRoot "Path_To_Project"
-ServerName blog.api.lan
+ServerName blog.wrapper.lan
 <Directory "Path_To_Project">
 </Directory>
 </VirtualHost>
