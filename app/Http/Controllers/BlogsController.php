@@ -40,28 +40,64 @@ class BlogsController extends Controller
 
     public function store(StoreBlog $request)
     {
-        $this->blog_service->createEntity($request->all());
+        try {
 
-        return redirect()->route($this->data_assign['module_name'].'_show');
+            $this->blog_service->createEntity($request->all());
+
+            session()->flash('success', 'Data Successfully added');
+
+        } catch (\Exception $e) {
+
+            session()->flash('error', $e->getMessage());
+        }
+
+        return redirect()->route($this->data_assign['module_name'] . '_show');
     }
 
     public function edit($id)
     {
-        $this->data_assign['data'] = $this->blog_service->getSingleEntity($id);
+        try {
 
-        return view($this->data_assign['module_name'] . '.' . Str::snake(__FUNCTION__), $this->data_assign);
+            $this->data_assign['data'] = $this->blog_service->getSingleEntity($id);
+
+            return view($this->data_assign['module_name'] . '.' . Str::snake(__FUNCTION__), $this->data_assign);
+
+        } catch (\Exception $e) {
+
+            session()->flash('error', $e->getMessage());
+
+            return redirect()->route($this->data_assign['module_name'] . '_show');
+        }
     }
 
     public function update(UpdateBlog $request)
     {
-        $this->blog_service->updateEntity($request->all());
+        try {
 
-        return redirect()->route($this->data_assign['module_name'].'_show');
+            $this->blog_service->updateEntity($request->all());
+
+            session()->flash('success', 'Data Successfully updated');
+
+        } catch (\Exception $e) {
+
+            session()->flash('error', $e->getMessage());
+        }
+
+        return redirect()->route($this->data_assign['module_name'] . '_show');
     }
 
     public function delete($id)
     {
-        $this->blog_service->deleteEntity($id);
+        try {
+
+            $this->blog_service->deleteEntity($id);
+
+            session()->flash('success', 'Data Successfully deleted');
+
+        } catch (\Exception $e) {
+
+            session()->flash('error', $e->getMessage());
+        }
 
         return redirect()->back();
     }

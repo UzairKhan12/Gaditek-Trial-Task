@@ -33,8 +33,7 @@
                                     <div class="col">
                                         <label for="exampleFormControlInput2">Description</label>
                                         <textarea type="text" class="form-control" name="description"
-                                                  required placeholder="Description">
-                                            {{ old('description') }}</textarea>
+                                                  required placeholder="Description">{{ old('description') }}</textarea>
                                         @include('includes.single_flash',['input_name' => 'description'])
                                     </div>
                                 </div>

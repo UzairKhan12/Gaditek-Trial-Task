@@ -4,9 +4,8 @@
     <!--  BEGIN CONTENT AREA  -->
     <div id="content" class="main-content">
         <div class="layout-px-spacing">
-
+            @include('includes.flash_messages')
             <div class="row layout-top-spacing">
-
                 <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                     <div class="widget-content widget-content-area br-6">
                         <a href="{{ route(config('constants.ADMIN_PREFIX') . $module_name . '_add') }}">
