@@ -4,88 +4,59 @@ namespace App\Libraries;
 
 class LumenWrapperClass
 {
+    private $api_endpoints, $api_url,$api_key;
+
     public function __construct()
     {
-        $this->apiURL = env('LUMEN_BLOG_URL');
+        $this->api_url = env('LUMEN_BLOG_URL');
+
+        $this->api_key = env('LUMEN_BLOG_API_KEY');
+
+        $this->api_endpoints = [
+            'blog' => 'blogs'
+        ];
     }
 
-    public function getDataRequest($endpoint, $params = '')
+    public function curlRequest(string $slug, string $params, string $method, array $post_data = []): object
     {
-        try {
+        $ch = curl_init();
 
-            $header = $this->getHeaders();
-
-            $response = $this->getRequest($this->apiURL . $endpoint . $params, $header);
-
-            return json_decode($response);
-
-        } catch (\Exception $e) {
-            //handle exception
-
-            throw new \Exception($e->getMessage());
-        }
-    }
-
-    public function postDataRequest($endpoint, $params, $post_data)
-    {
-        try {
-
-            $header = $this->getHeaders();
-
-            $response = $this->postRequest($this->apiURL . $endpoint . $params, $header, $post_data);
-
-            return json_decode($response);
-
-        } catch (\Exception $e) {
-            //handle exception
-
-            throw new \Exception($e->getMessage());
-        }
-    }
-
-    public function getHeaders()
-    {
-        return array(
-            'Accept: application/json'
+        $headers = array(
+            'api-key:'.$this->api_key
         );
-    }
 
-    private function curlRequest($apiURL, $headers, $method, $post_data = [])
-    {
-        try {
+        if ($method == 'PUT') {
 
-            $ch = curl_init();
+            array_push($headers,'Content-Type:application/x-www-form-urlencoded');
 
-            curl_setopt($ch, CURLOPT_URL, $apiURL);
-
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
-
-            if ($post_data) {
-
-                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($post_data));
-            }
-
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-            $response = curl_exec($ch);
-
-            if (curl_errno($ch)) {
-
-                $error_msg = curl_error($ch);
-
-                throw new \Exception($error_msg);
-            }
-
-            curl_close($ch);
-
-        } catch (\Exception $e) {
-
-            throw new \Exception($e->getMessage());
+            $post_data = http_build_query($post_data);
         }
 
-        return $response;
+        curl_setopt_array($ch, array(
+            CURLOPT_URL => $this->api_url . $this->api_endpoints[$slug] . $params,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => $method,
+            CURLOPT_POSTFIELDS => $post_data,
+            CURLOPT_HTTPHEADER => $headers
+        ));
+
+        $response = curl_exec($ch);
+
+        if (curl_errno($ch)) {
+
+            $error_msg = curl_error($ch);
+
+            throw new \Exception($error_msg);
+        }
+
+        curl_close($ch);
+
+        return json_decode($response);
     }
 
 }
