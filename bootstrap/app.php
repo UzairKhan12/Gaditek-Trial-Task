@@ -80,6 +80,10 @@ $app->configure('app');
 //     'auth' => App\Http\Middleware\Authenticate::class,
 // ]);
 
+$app->routeMiddleware([
+    'api_key' => App\Http\Middleware\ApiKey::class,
+ ]);
+
 /*
 |--------------------------------------------------------------------------
 | Register Service Providers

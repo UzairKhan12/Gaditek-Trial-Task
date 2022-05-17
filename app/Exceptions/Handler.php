@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -54,6 +55,11 @@ class Handler extends ExceptionHandler
             $errors = collect($exception->errors());
 
             return sendErrorResponse($errors->flatten()->first(),$exception->errors(),422);
+        }
+
+        if ($exception instanceof ModelNotFoundException) {
+
+            return sendErrorResponse('Invalid entity Id',[],404);
         }
 
         return parent::render($request, $exception);

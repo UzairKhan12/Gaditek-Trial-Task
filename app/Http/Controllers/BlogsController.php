@@ -20,7 +20,7 @@ class BlogsController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'title' => 'required|max:50',
+            'title' => 'required',
             'description' => 'required'
         ]);
 
@@ -31,11 +31,6 @@ class BlogsController extends Controller
 
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
-            'title' => 'required|max:50',
-            'description' => 'required'
-        ]);
-
         $this->primary_model->findOrFail($id)->update($request->only($this->primary_model->getFillable()));
 
         $data = $this->primary_model->findOrFail($id);
@@ -59,9 +54,9 @@ class BlogsController extends Controller
 
     public function getAll(Request $request)
     {
-        $data = $this->primary_model->paginate($request->has('limit') ? $request->limit : 10)->toArray();
+        $data = $this->primary_model->get();
 
-        return sendPaginatedResponse($data, 'Blogs fetched successfully');
+        return sendSuccessResponse($data, 'Blogs fetched successfully');
     }
 
 }

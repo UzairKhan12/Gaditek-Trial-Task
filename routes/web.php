@@ -18,7 +18,7 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->group(['prefix' => 'blogs'], function () use ($router) {
+$router->group(['prefix' => 'blogs', 'middleware' => 'api_key'], function () use ($router) {
 
     $router->post('', 'BlogsController@store');
 
