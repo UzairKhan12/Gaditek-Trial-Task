@@ -54,7 +54,7 @@ class BlogsController extends Controller
 
     public function getAll(Request $request)
     {
-        $data = $this->primary_model->get();
+        $data = $this->primary_model->getAllBlogs($request->all());
 
         return sendSuccessResponse($data, 'Blogs fetched successfully');
     }
