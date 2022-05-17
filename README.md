@@ -8,7 +8,7 @@ Create a database in MySQL and run a php artisan migrate command to migrate the 
 
 # How To Test
 
-Goto the root directory of this project after setting it up and use the "php artisan blog:api" to run and test the application. 
+Open the virtual host, you'll see the blogs crud operation on frontend as well, also if you want to test it on command line goto the root directory of this project after setting it up and use the "php artisan blog:api" to run and test the application. 
 
 # How To Create Virtual Host
 
